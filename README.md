@@ -1,11 +1,11 @@
-# 🛵 HungryPH: Manila Food Delivery Analytics
+# HungryPH: Manila Food Delivery Analytics
 
-## 🏗️ Architecture
+## Architecture
 - **Ingestion**: Python simulation using **Dagster** generating orders for Makati, QC, Taguig, and Manila.
 - **Storage**: **PostgreSQL** running in **Docker**.
 - **Transformation**: **dbt** (Silver layer) for cleaning and VAT calculations.
 
-## 🚀 How to Run
+## How to Run
 1. **Clone the repo**:
    `git clone <your-repo-url>`
 2. **Setup Environment**:
