@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  hungryph_db_service:
+    image: postgres:15
+    container_name: hungryph_db_container
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer: 
+    image: adminer
+    container_name: hungryph_adminer_container
+    restart: always
+    ports:
+      - "8080:8080"
+      
+volumes:
+  postgres_data:
