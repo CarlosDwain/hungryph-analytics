@@ -39,7 +39,7 @@ def raw_orders():
     df = pd.DataFrame(orders)
     
     # Send to Postgres
-    df.to_sql("bronze_orders", engine, if_exists="append", index=False)
+    df.to_sql("hungryph_orders", engine, if_exists="append", index=False)
     
     return dg.MaterializeResult(
         metadata={
