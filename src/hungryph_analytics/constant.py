@@ -11,5 +11,19 @@ CITIES = {
     "Caloocan": {"lat": 14.6416, "lon": 120.9762}
 }
 
-FOOD_TYPES = ["Jollibee-style", "Samgyupsal", "Milk Tea", "Sisig", "Pares", "Chicken Inasal"]
+FOOD_TYPES = [
+    "Fast Food",          # Jollibee, McDo
+    "Milk Tea",           # CoCo, Macao
+    "Korean BBQ",         # Samgyupsal
+    "Coffee & Bakery",    # Starbucks, Wildflour
+    "Filipino Comfort",   # Sisig, Pares, Sinigang
+    "Japanese",           # Ramen, Sushi
+    "Chinese",            # Dimsum, Binondo-style
+    "Healthy & Salads",   # SaladStop
+    "Desserts",           # Halo-halo, Cakes
+    "Street Food",        # Isaw, Fishballs
+    "Chicken Inasal",     # Mang Inasal style
+    "Pizza & Pasta"       # Yellow Cab, Shakey's
+]
+
 PAYMENT_METHODS = ["GCash", "Maya", "Cash on Delivery", "Credit Card"]
