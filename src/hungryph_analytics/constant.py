@@ -27,3 +27,13 @@ FOOD_TYPES = [
 ]
 
 PAYMENT_METHODS = ["GCash", "Maya", "Cash on Delivery", "Credit Card"]
+
+RIDER_TYPES = ["Bicycle", "Motorcycle", "Car"]
+
+# Average speed in km/h considering Manila traffic
+# Bicycles can lane-filter in tight streets; Cars get stuck in EDSA.
+RIDER_CONFIG = {
+    "Bicycle": {"avg_speed": 12, "max_dist_km": 5},
+    "Motorcycle": {"avg_speed": 25, "max_dist_km": 15},
+    "Car": {"avg_speed": 15, "max_dist_km": 25}
+}

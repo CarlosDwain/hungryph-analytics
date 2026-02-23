@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
 # Keeping your local PH constants
-from hungryph_analytics.constant import CITIES, FOOD_TYPES, PAYMENT_METHODS
+from hungryph_analytics.constant import CITIES, FOOD_TYPES, PAYMENT_METHODS, RIDER_TYPES, RIDER_CONFIG
 
 load_dotenv()
 
@@ -17,14 +17,16 @@ engine = create_engine(DATABASE_URL)
 
 @dg.asset
 def raw_orders():
-    """
-    Bronze Layer: Simulates 100 orders from Metro Manila.
-    Using @dg.asset tells Dagster this is a modern component-managed asset.
-    """
     orders = []
     for _ in range(100):
         city_name = random.choice(list(CITIES.keys()))
         coords = CITIES[city_name]
+        rider = random.choice(RIDER_TYPES)
+        base_speed = RIDER_CONFIG[rider]["avg_speed"]
+        
+        # Add some random traffic variance (-5 to +5 km/h)
+        actual_speed = max(5, base_speed + random.uniform(-5, 5))
+        
         orders.append({
             "order_id": str(uuid.uuid4()),
             "city": city_name,
@@ -33,17 +35,19 @@ def raw_orders():
             "cuisine": random.choice(FOOD_TYPES),
             "amount_php": round(random.uniform(150, 2000), 2),
             "payment_method": random.choice(PAYMENT_METHODS),
+            "rider_type": rider,
+            "avg_speed_kmh": round(actual_speed, 2),
             "timestamp": pd.Timestamp.now()
         })
     
     df = pd.DataFrame(orders)
     
-    # Send to Postgres
+    # Send to Postgres, if_exists='append' to add to existing data, 'replace' to overwrite
     df.to_sql("hungryph_orders", engine, if_exists="append", index=False)
     
     return dg.MaterializeResult(
         metadata={
-            "num_records": len(df),
-            "preview": dg.MetadataValue.md(df.head().to_markdown())
+            "row_count": len(df),
+            "motorcycle_ratio": len(df[df['rider_type'] == 'Motorcycle']) / len(df)
         }
     )
