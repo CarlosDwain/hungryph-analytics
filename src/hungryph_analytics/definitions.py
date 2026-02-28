@@ -1,8 +1,13 @@
-from pathlib import Path
+from dagster import Definitions, load_assets_from_modules
+from .defs import assets, resources
 
-from dagster import definitions, load_from_defs_folder
+# Load assets from the assets module
+all_assets = load_assets_from_modules([assets])
 
-
-@definitions
-def defs():
-    return load_from_defs_folder(path_within_project=Path(__file__).parent)
+# Define the Dagster definitions with assets and resources
+defs = Definitions(
+    assets=all_assets,
+    resources={
+        "db": resources.db,
+    },
+)

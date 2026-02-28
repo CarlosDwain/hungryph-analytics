@@ -2,21 +2,12 @@ import os
 import pandas as pd
 import random
 import uuid
-import dagster as dg # The new standard way to import
-from sqlalchemy import create_engine
-from dotenv import load_dotenv
-
-# Keeping your local PH constants
+import dagster as dg
+from .resources import PostgresResource
 from hungryph_analytics.constant import CITIES, FOOD_TYPES, PAYMENT_METHODS, RIDER_TYPES, RIDER_CONFIG
 
-load_dotenv()
-
-# Database setup
-DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-engine = create_engine(DATABASE_URL)
-
 @dg.asset
-def raw_orders():
+def raw_orders(db: PostgresResource):
     orders = []
     for _ in range(100):
         city_name = random.choice(list(CITIES.keys()))
@@ -42,12 +33,14 @@ def raw_orders():
     
     df = pd.DataFrame(orders)
     
+    engine = db.get_engine()
+    
     # Send to Postgres, if_exists='append' to add to existing data, 'replace' to overwrite
     df.to_sql("hungryph_orders", engine, if_exists="append", index=False)
     
     return dg.MaterializeResult(
         metadata={
             "row_count": len(df),
-            "motorcycle_ratio": len(df[df['rider_type'] == 'Motorcycle']) / len(df)
+            "motorcycle_ratio": len(df[df['rider_type'] == 'Motorcycle']) / len(df) if len(df) > 0 else 0
         }
     )
