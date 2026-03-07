@@ -6,7 +6,7 @@ import dagster as dg
 from .resources import PostgresResource
 from hungryph_analytics.constant import CITIES, FOOD_TYPES, PAYMENT_METHODS, RIDER_TYPES, RIDER_CONFIG
 
-@dg.asset
+@dg.asset(name="hungryph_orders")
 def raw_orders(db: PostgresResource):
     orders = []
     for _ in range(100):

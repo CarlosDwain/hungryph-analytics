@@ -4,4 +4,7 @@ sources:
   - name: raw_data
     schema: public
     tables:
-      - name: hungryph_orders
+      - name: hungryph_orders  
+        meta:
+          dagster:
+            asset_key: ["hungryph_orders"]
