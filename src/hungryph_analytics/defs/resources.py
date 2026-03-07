@@ -1,5 +1,6 @@
 from dagster import ConfigurableResource, EnvVar
 from sqlalchemy import create_engine, Engine
+from dagster_dbt import DbtCliResource
 
 class PostgresResource(ConfigurableResource):
     user: str
@@ -19,3 +20,5 @@ db = PostgresResource(
     port=EnvVar("DB_PORT"),
     database=EnvVar("DB_NAME"),
 )
+
+dbt = DbtCliResource(project_dir="./hungryph_dbt",)
