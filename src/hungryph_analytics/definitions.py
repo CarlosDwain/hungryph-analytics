@@ -10,7 +10,7 @@ dbt_project = DbtProject(project_dir=dbt_project_dir)
 dbt_project.prepare_if_dev()
 
 @dbt_assets(manifest=dbt_project.manifest_path)
-def hungryph_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource): yield from dbt.cli(["build"], context=context).get_artifacts()
+def hungryph_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource): yield from dbt.cli(["build"], context=context).stream()
 
 # Load assets from the assets module
 python_assets = load_assets_from_modules([assets])
